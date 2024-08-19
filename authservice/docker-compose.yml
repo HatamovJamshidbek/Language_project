@@ -1,0 +1,56 @@
+services:
+  postgres:
+    image: postgres:16.3
+    container_name: postgres1
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1111
+      POSTGRES_DB: legueauth
+    networks:
+      - app-networks
+    ports:
+      - "5438:5432"
+    volumes:
+      - db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  migrate:
+    image: migrate/migrate
+    networks: 
+      - app-networks
+    volumes:
+      - ./migrations:/migrations
+    command: [ "-path", "/migrations", "-database", "postgres://postgres:1111@postgres:5432/legueauth?sslmode=disable", "up" ]
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  auth-service:
+    build: .
+    container_name: auth-service
+    networks:
+      - app-networks
+    ports:
+      - "8081:8081"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6380:6379"
+    networks:
+      - app-networks
+
+volumes:
+  db:
+
+networks:
+  app-networks:
+    external: true

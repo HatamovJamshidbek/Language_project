@@ -1,0 +1,54 @@
+version: '3.9'
+
+services:
+
+  migrate:
+    image: migrate/migrate
+    networks: 
+      - app-networks
+    volumes:
+      - ./migrations:/migrations
+    command: [ "-path", "/migrations", "-database", "postgres://postgres:1111@postgres-db1:5432/learning_service?sslmode=disable", "up" ]
+    depends_on:
+      db:
+        condition: service_healthy
+
+  learning-service:
+    build: .
+    container_name: learning_service  
+    networks:
+      - app-networks
+    depends_on:
+      db:
+        condition: service_healthy
+  
+  db:
+    image: postgres:16.3
+    container_name: postgres-db1
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1111
+      POSTGRES_DB: learning_service
+    networks:
+      - app-networks
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  db-data:
+
+networks:
+  app-networks:
+    name: app-networks
+    driver: bridge
+    external: true
+
+
+
+
+

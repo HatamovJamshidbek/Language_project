@@ -1,0 +1,122 @@
+syntax = "proto3";
+
+option go_package = "genproto/learning";
+
+package learning;
+
+service LearningService {
+    rpc GetLanguages(Void)returns(GetLanguageResponse);
+    rpc StartLearnLanguage(StartLanguageRequest)returns(StartLanguageResponse);
+    rpc GetLessonsList(Void)returns(LessonsListResponse);
+    rpc GetInfoLessons(Void)returns(LessonsInfoRepository);
+    rpc ComplateLesson(Void)returns(ComplateLessonResponse);
+    rpc GetLanguageExercises(Void)returns(LanguageExerciseResponse);
+    rpc SubmitExerciseAnswer(ExerciseAnswerRequest)returns(ExerciseAnswerResponse);
+    rpc GetVocabularyList(Void)returns(VocabularyListResponse);
+    rpc AddVocabulary(AddVocabularyRequest)returns(AddVocabularyResponse);
+}
+
+message Void {}
+
+message Languages{
+    string code = 1;
+    string name = 2;
+    string flagEmogi = 3;
+}
+message GetLanguageResponse{
+    repeated Languages languages = 1;
+}
+
+message StartLanguageRequest{
+    string languageCode = 1;
+    string initalLevel = 2;
+}
+message Info {
+    string id = 1;
+    string title = 2;
+}
+message StartLanguageResponse{
+    string message = 1;
+    string currentLavel = 2;
+    Info nextLesson = 3;
+}
+message Lessons{
+    string id = 1;
+    string title = 2;
+    string level = 3;
+    bool completed = 4;
+}
+message LessonsListResponse{
+    string language = 1;
+    repeated Lessons lessons = 2;
+}
+
+
+message Content{
+    string type = 1;
+    string data = 2;
+}
+message Data{
+    string word = 1;
+    string translation = 2;
+    string audioUrl = 3;
+}
+message LessonsInfoRepository{
+    string id = 1;
+    string title = 2;
+    string lenguage = 3;
+    string level = 4;
+    repeated Content content = 5;
+    string type = 6;
+    repeated Data data = 7;
+}
+
+message ComplateLessonResponse{
+    string message = 1;
+    int32 xpEarned = 2;
+    Info nextLesson = 3;
+}
+
+message Exercises{
+    string id = 1;
+    string type = 2;
+    string question = 3;
+    string correctAnswer = 4;
+}
+message LanguageExerciseResponse{
+    string language = 1;
+    repeated Exercises exercises = 2;
+
+}
+
+message ExerciseAnswerRequest{
+    string answer = 1;
+}
+message ExerciseAnswerResponse{
+    bool correct = 1;
+    string explanation = 2;
+    int32 xpEarned = 3;
+}
+
+message Vocabulary{
+    string word = 1;
+    string translation = 2;
+    string partOfSpeech = 3;
+    string exampleSentence = 4;
+    string audioUrl = 5;
+}
+message VocabularyListResponse{
+    string language = 1;
+    repeated Vocabulary vocabulary = 2;
+}
+
+message AddVocabularyRequest{
+    string word = 1;
+    string translation = 2;
+    string partOfSpeech = 3;
+    string exampleSentence = 4;
+}
+message AddVocabularyResponse{
+    string message = 1;
+    string wordId = 2;
+}

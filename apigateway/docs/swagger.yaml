@@ -1,0 +1,745 @@
+definitions:
+  learning.AddVocabularyRequest:
+    properties:
+      exampleSentence:
+        type: string
+      languagecode:
+        type: string
+      partOfSpeech:
+        type: string
+      translation:
+        type: string
+      word:
+        type: string
+    type: object
+  learning.AddVocabularyResponse:
+    properties:
+      message:
+        type: string
+      wordId:
+        type: string
+    type: object
+  learning.ComplateLessonResponse:
+    properties:
+      message:
+        type: string
+      nextLesson:
+        $ref: '#/definitions/learning.Info'
+      xpEarned:
+        type: integer
+    type: object
+  learning.ExerciseAnswerRequest:
+    properties:
+      answer:
+        type: string
+      exercise_id:
+        type: string
+    type: object
+  learning.ExerciseAnswerResponse:
+    properties:
+      correct:
+        type: boolean
+      explanation:
+        type: string
+      xpEarned:
+        type: integer
+    type: object
+  learning.Exercises:
+    properties:
+      correctAnswer:
+        type: string
+      id:
+        type: string
+      question:
+        type: string
+      type:
+        type: string
+    type: object
+  learning.GetInfoLessonsResponse:
+    properties:
+      lesson_id:
+        type: string
+    type: object
+  learning.GetLanguageResponse:
+    properties:
+      languages:
+        items:
+          $ref: '#/definitions/learning.Language'
+        type: array
+    type: object
+  learning.Info:
+    properties:
+      id:
+        type: string
+      title:
+        type: string
+    type: object
+  learning.Language:
+    properties:
+      code:
+        type: string
+      flagEmogi:
+        type: string
+      name:
+        type: string
+    type: object
+  learning.LanguageExerciseResponse:
+    properties:
+      exercises:
+        items:
+          $ref: '#/definitions/learning.Exercises'
+        type: array
+      language:
+        type: string
+    type: object
+  learning.Lesson:
+    properties:
+      completed:
+        type: boolean
+      id:
+        type: string
+      level:
+        type: string
+      title:
+        type: string
+    type: object
+  learning.LessonsListResponse:
+    properties:
+      language:
+        type: string
+      lessons:
+        items:
+          $ref: '#/definitions/learning.Lesson'
+        type: array
+    type: object
+  learning.StartLanguageRequest:
+    properties:
+      initalLevel:
+        type: string
+      languageCode:
+        type: string
+    type: object
+  learning.StartLanguageResponse:
+    properties:
+      currentLavel:
+        type: string
+      message:
+        type: string
+      nextLesson:
+        $ref: '#/definitions/learning.Info'
+    type: object
+  learning.Vocabulary:
+    properties:
+      audioUrl:
+        type: string
+      exampleSentence:
+        type: string
+      partOfSpeech:
+        type: string
+      translation:
+        type: string
+      word:
+        type: string
+    type: object
+  learning.VocabularyListResponse:
+    properties:
+      language:
+        type: string
+      vocabulary:
+        items:
+          $ref: '#/definitions/learning.Vocabulary'
+        type: array
+    type: object
+  model.GetInfoLessonsRequest:
+    properties:
+      id:
+        type: string
+    type: object
+  model.GetLanguageExercisesRequest:
+    properties:
+      code:
+        type: string
+    type: object
+  model.GetLessonsListRequest:
+    properties:
+      code:
+        type: string
+    type: object
+  model.GetVocabularyListRequest:
+    properties:
+      code:
+        type: string
+    type: object
+  user.DeleteUserResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  user.GetByUserIdResponse:
+    properties:
+      createdAt:
+        type: string
+      email:
+        type: string
+      fullname:
+        type: string
+      id:
+        type: string
+      nativelanguage:
+        type: string
+      password:
+        type: string
+      updatedAt:
+        type: string
+      username:
+        type: string
+    type: object
+  user.ProfileResponse:
+    properties:
+      createdAt:
+        type: string
+      email:
+        type: string
+      fullname:
+        type: string
+      id:
+        type: string
+      learninglanguage:
+        type: string
+      nativelanguage:
+        type: string
+      username:
+        type: string
+    type: object
+  user.ProfileUpdateRequest:
+    properties:
+      fullname:
+        type: string
+      nativelanguage:
+        type: string
+    type: object
+  user.ProfileUpdateResponse:
+    properties:
+      email:
+        type: string
+      fullname:
+        type: string
+      id:
+        type: string
+      nativelanguage:
+        type: string
+      updatedAt:
+        type: string
+      username:
+        type: string
+    type: object
+  user.RegisterRequest:
+    properties:
+      email:
+        type: string
+      fullname:
+        type: string
+      nativelanguage:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  user.RegisterResponse:
+    properties:
+      createdAt:
+        type: string
+      email:
+        type: string
+      fullname:
+        type: string
+      id:
+        type: string
+      nativelanguage:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /auth/profile:
+    get:
+      consumes:
+      - application/json
+      description: Get the current user's profile
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.ProfileResponse'
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Get user profile
+      tags:
+      - User
+    put:
+      consumes:
+      - application/json
+      description: Update the current user's profile
+      parameters:
+      - description: Update User Request
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/user.ProfileUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.ProfileUpdateResponse'
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Update user profile
+      tags:
+      - User
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Register a new user with the provided details
+      parameters:
+      - description: Add User Request
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/user.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/user.RegisterResponse'
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Add a new user
+      tags:
+      - User
+  /auth/users/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete the user with the provided ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.DeleteUserResponse'
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Delete user
+      tags:
+      - User
+    get:
+      consumes:
+      - application/json
+      description: Get the user with the provided ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.GetByUserIdResponse'
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Get user by ID
+      tags:
+      - User
+  /learning/exercises:
+    get:
+      consumes:
+      - application/json
+      description: Get language exercises
+      parameters:
+      - description: Language Request
+        in: body
+        name: language
+        required: true
+        schema:
+          $ref: '#/definitions/model.GetLanguageExercisesRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/learning.LanguageExerciseResponse'
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Get language exercises
+      tags:
+      - Learning
+  /learning/exercises/{id}:
+    post:
+      consumes:
+      - application/json
+      description: Submit exercise answer
+      parameters:
+      - description: Exercise ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Exercise Answer Request
+        in: body
+        name: answer
+        required: true
+        schema:
+          $ref: '#/definitions/learning.ExerciseAnswerRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/learning.ExerciseAnswerResponse'
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Submit exercise answer
+      tags:
+      - Learning
+  /learning/languages:
+    get:
+      consumes:
+      - application/json
+      description: Get languages list
+      parameters:
+      - default: 10
+        description: Limit
+        in: query
+        name: limit
+        type: integer
+      - default: 0
+        description: Page
+        in: query
+        name: page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/learning.GetLanguageResponse'
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Get languages
+      tags:
+      - Learning
+    post:
+      consumes:
+      - application/json
+      description: Start learn language
+      parameters:
+      - description: Start Language Request
+        in: body
+        name: language
+        required: true
+        schema:
+          $ref: '#/definitions/learning.StartLanguageRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/learning.StartLanguageResponse'
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Start learn language
+      tags:
+      - Learning
+  /learning/lessons:
+    get:
+      consumes:
+      - application/json
+      description: Get lessons list
+      parameters:
+      - description: Language Request
+        in: body
+        name: language
+        required: true
+        schema:
+          $ref: '#/definitions/model.GetLessonsListRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/learning.LessonsListResponse'
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Get lessons list
+      tags:
+      - Learning
+  /learning/lessons/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get info lessons
+      parameters:
+      - description: Lesson ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/learning.GetInfoLessonsResponse'
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Get info lessons
+      tags:
+      - Learning
+  /learning/lessons/complate:
+    post:
+      consumes:
+      - application/json
+      description: Complate lesson
+      parameters:
+      - description: Lesson Request
+        in: body
+        name: lesson
+        required: true
+        schema:
+          $ref: '#/definitions/model.GetInfoLessonsRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/learning.ComplateLessonResponse'
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Complate lesson
+      tags:
+      - Learning
+  /learning/vocabulary:
+    get:
+      consumes:
+      - application/json
+      description: Get vocabulary list
+      parameters:
+      - description: Language Request
+        in: body
+        name: language
+        required: true
+        schema:
+          $ref: '#/definitions/model.GetVocabularyListRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/learning.VocabularyListResponse'
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Get vocabulary list
+      tags:
+      - Learning
+    post:
+      consumes:
+      - application/json
+      description: Add vocabulary
+      parameters:
+      - description: Vocabulary Request
+        in: body
+        name: vocabulary
+        required: true
+        schema:
+          $ref: '#/definitions/learning.AddVocabularyRequest'
+      - description: Language Code
+        in: query
+        name: language_code
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/learning.AddVocabularyResponse'
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Add vocabulary
+      tags:
+      - Learning
+swagger: "2.0"

@@ -1,0 +1,120 @@
+syntax = "proto3";
+
+option go_package = "genproto/user";
+
+package user;
+
+service Users {
+    rpc Register(RegisterRequest)returns (RegisterResponse);
+    rpc Login(LoginRequest)returns(LoginResponse);
+    rpc Logout(LogoutRequest)returns(Message);
+    rpc GetUserProfile(Void)returns(ProfileResponse);
+    rpc UpdateUserProfile(ProfileUpdateRequest)returns(ProfileUpdateResponse);
+    rpc ChangePassword(ChangePasswordRequest)returns(Message);
+    rpc ForgotPassword(ForgotPasswordRequest)returns(Message);
+    rpc ResetPassword(ResetPasswordRequest)returns(Message);
+    rpc DeleteUser(DeleteUserRequest) returns (DeleteUserResponst);
+    rpc GetByUserId(GetByUserIdRequest) returns (GetByUserIdResponst);
+}
+
+message Void {}
+
+message LogoutRequest {
+    string refresh_token = 1;
+}
+
+message GetByUserIdRequest {
+    string id = 1;
+}
+
+message GetByUserIdResponst {
+    string id = 1;
+    string username = 2;
+    string email = 3;
+    string password = 4;
+    string fullname = 5;
+    string nativelanguage = 6;
+    string createdAt = 7;
+    string updatedAt = 8;
+}
+
+message DeleteUserRequest {
+    string user_id = 1;
+}
+
+message DeleteUserResponst {
+    string message = 1;
+}
+message Message{
+    string message = 1;
+}
+
+message RegisterRequest{
+    string username = 1;
+    string email = 2;
+    string password = 3;
+    string fullname = 4;
+    string nativelanguage = 5;
+}
+message RegisterResponse{
+    string id = 1;
+    string username = 2;
+    string email = 3;
+    string password = 4;
+    string fullname = 5;
+    string nativelanguage = 6;
+    string createdAt = 7;
+}
+
+message LoginRequest{
+    string email = 1;
+    string password = 2;
+}
+message LoginResponse{
+    string user_id = 1;
+    string user_name = 2;
+    string native_language = 3;
+}
+
+message ProfileResponse1 {
+    string id = 1;
+    string username = 2;
+    string email = 3;
+    string fullname = 4;
+    string nativelanguage = 5;
+    string learninglanguage = 6;
+    string createdAt = 7;
+
+}
+
+message ProfileResponse{
+    repeated ProfileResponse1 profiles =1;
+}   
+
+message ProfileUpdateRequest{
+    string fullname = 1;
+    string nativelanguage = 2;
+}
+message ProfileUpdateResponse{
+    string id = 1;
+    string username = 2;
+    string email = 3;
+    string fullname = 4;
+    string nativelanguage = 5;
+    string updatedAt = 6;
+}
+
+message ChangePasswordRequest{
+    string currentPassword = 1;
+    string newPassword = 2;
+}
+
+
+message ForgotPasswordRequest {
+    string email = 1;
+}
+
+message ResetPasswordRequest{
+    string resetToken = 1;
+    string newPassword = 2;
+}
