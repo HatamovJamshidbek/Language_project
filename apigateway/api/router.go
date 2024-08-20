@@ -3,7 +3,6 @@ package api
 import (
 	"api_service/api/handler"
 	"api_service/config"
-	"api_service/middlewere"
 	"log/slog"
 
 	"github.com/casbin/casbin/v2"
@@ -29,9 +28,9 @@ func NewRouter(cfg config.Config, logger *slog.Logger, enforcer *casbin.Enforcer
 	router := gin.Default()
 	h := handler.NewHandler(cfg, logger, enforcer)
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-
+	//router.Use(middlewere.JWTMiddleware(), middlewere.CasbinMiddleware(enforcer))
 	auth := router.Group("/auth")
-	auth.Use(middlewere.JWTMiddleware(), middlewere.CasbinMiddleware(enforcer))
+
 	{
 		auth.POST("/register", h.Register)
 		auth.GET(("/profile"), h.GetUserProfile)
@@ -41,6 +40,7 @@ func NewRouter(cfg config.Config, logger *slog.Logger, enforcer *casbin.Enforcer
 	}
 
 	learning := router.Group("learning")
+
 	{
 		learning.GET("/languages", h.GetLanguages)
 		learning.POST("/languages", h.StartLearnLanguage)

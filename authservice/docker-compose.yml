@@ -53,4 +53,5 @@ volumes:
 
 networks:
   app-networks:
+    name:  app-networks
     external: true

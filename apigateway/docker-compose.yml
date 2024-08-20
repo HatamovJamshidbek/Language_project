@@ -35,5 +35,6 @@ volumes:
 
 networks:
   app-networks:
+    name:   app-networks
     driver: bridge
 

@@ -72,7 +72,7 @@ func CasbinEnforcer(logger *slog.Logger) (*casbin.Enforcer, error) {
 		{"customer", "/learning/lessons", "GET"},
 		{"customer", "/learning/lessons/:id", "GET"},
 		{"customer", "/learning/lessons/complate", "POST"},
-		{"customer", "/learning/exercises", "GET"},
+		{"customer", "/learning/exercises:code", "GET"},
 		{"customer", "/learning/exercises/:id", "POST"},
 		{"customer", "/learning/vocabulary", "GET"},
 		{"customer", "/learning/vocabulary", "POST"},
